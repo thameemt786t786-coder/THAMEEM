@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thameem Ansari I — Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0b1210;
+    --panel:#0f1a17;
+    --panel-2:#132420;
+    --line:#22352f;
+    --paper:#eef3ee;
+    --paper-dim:#a9bab2;
+    --signal:#5ff2a6;
+    --signal-dim:#2b6b4d;
+    --alert:#f2a65f;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--font-mono);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--signal);color:var(--ink);}
+
+  .grid-overlay{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    opacity:0.25;
+    mask-image:radial-gradient(circle at 50% 0%, black, transparent 75%);
+  }
+
+  .wrap{position:relative; z-index:1; max-width:920px; margin:0 auto; padding:0 28px;}
+
+  /* NAV */
+  nav{
+    position:sticky; top:0; z-index:10;
+    background:rgba(11,18,16,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; justify-content:space-between; align-items:center; height:58px;}
+  .nav-mark{font-family:var(--font-mono); font-size:13px; color:var(--signal); letter-spacing:0.5px;}
+  .nav-links{display:flex; gap:24px; list-style:none; font-size:13px;}
+  .nav-links a{color:var(--paper-dim); text-decoration:none; transition:color .2s;}
+  .nav-links a:hover{color:var(--signal);}
+
+  /* HERO */
+  header.hero{padding:90px 0 70px; position:relative;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; color:var(--signal); letter-spacing:1.5px; text-transform:uppercase;
+    border:1px solid var(--signal-dim); padding:5px 12px; border-radius:2px;
+    margin-bottom:28px;
+  }
+  .eyebrow::before{content:''; width:6px; height:6px; background:var(--signal); border-radius:50%; box-shadow:0 0 8px var(--signal); animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+  h1.title{
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(38px, 6vw, 64px);
+    line-height:1.05; letter-spacing:-1px;
+    color:var(--paper); max-width:760px;
+  }
+  h1.title span{color:var(--signal);}
+
+  .role-line{
+    font-family:var(--font-mono); font-size:16px; color:var(--paper-dim);
+    margin-top:22px; max-width:560px;
+  }
+  .role-line .cursor{display:inline-block; width:8px; height:16px; background:var(--signal); vertical-align:middle; animation:blink 1s steps(1) infinite; margin-left:2px;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .hero-links{margin-top:38px; display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--font-mono); font-size:13px; text-decoration:none;
+    padding:11px 20px; border-radius:2px; border:1px solid var(--line);
+    color:var(--paper); transition:all .2s;
+  }
+  .btn.primary{background:var(--signal); color:var(--ink); border-color:var(--signal); font-weight:600;}
+  .btn.primary:hover{background:var(--paper);}
+  .btn:not(.primary):hover{border-color:var(--signal); color:var(--signal);}
+
+  /* SECTION LABELS */
+  .section{padding:64px 0; border-top:1px solid var(--line);}
+  .sec-label{
+    font-size:12px; color:var(--signal); letter-spacing:2px; text-transform:uppercase;
+    margin-bottom:14px; font-weight:600;
+  }
+  .sec-title{
+    font-family:var(--font-display); font-size:clamp(24px,3.5vw,32px);
+    font-weight:600; color:var(--paper); margin-bottom:30px; max-width:600px;
+  }
+
+  /* ABOUT */
+  .about-text{max-width:640px; color:var(--paper-dim); font-size:15px; line-height:1.85;}
+  .about-text strong{color:var(--paper); font-weight:600;}
+
+  .stack-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:30px;}
+  .chip{
+    font-size:12.5px; padding:7px 13px; border:1px solid var(--line);
+    border-radius:2px; color:var(--paper-dim); background:var(--panel);
+  }
+
+  /* FEATURED PROJECT — case file styling */
+  .case-file{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:3px solid var(--signal);
+    border-radius:3px;
+    padding:32px 32px 28px;
+    position:relative;
+  }
+  .case-header{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    flex-wrap:wrap; gap:12px;
+    padding-bottom:18px; margin-bottom:22px; border-bottom:1px dashed var(--line);
+  }
+  .case-id{font-size:11px; color:var(--paper-dim); letter-spacing:1px;}
+  .case-status{
+    font-size:11px; color:var(--alert); border:1px solid var(--alert); padding:3px 10px;
+    border-radius:20px; letter-spacing:0.5px;
+  }
+  .case-title{
+    font-family:var(--font-display); font-size:22px; font-weight:600; color:var(--paper);
+    margin-bottom:10px;
+  }
+  .case-brief{color:var(--paper-dim); font-size:14.5px; max-width:600px; margin-bottom:26px;}
+
+  .module-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:26px;}
+  @media(max-width:600px){.module-list{grid-template-columns:1fr;}}
+  .module{
+    padding:14px 16px; background:var(--panel-2); border:1px solid var(--line); border-radius:2px;
+  }
+  .module .mnum{color:var(--signal); font-size:11px; letter-spacing:1px; display:block; margin-bottom:6px;}
+  .module .mname{color:var(--paper); font-size:13.5px; font-weight:500;}
+
+  .case-stack{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;}
+  .case-stack span{
+    font-size:11.5px; color:var(--signal-dim); background:rgba(95,242,166,0.08);
+    border:1px solid var(--signal-dim); padding:4px 10px; border-radius:2px; color:var(--signal);
+  }
+
+  .case-footer{display:flex; gap:14px; padding-top:20px; border-top:1px dashed var(--line);}
+  .case-footer a{
+    font-size:12.5px; color:var(--paper-dim); text-decoration:none; display:flex; align-items:center; gap:6px;
+    transition:color .2s;
+  }
+  .case-footer a:hover{color:var(--signal);}
+
+  /* CONTACT */
+  .contact-grid{display:flex; flex-wrap:wrap; gap:16px; margin-top:10px;}
+  .contact-card{
+    flex:1; min-width:200px;
+    padding:20px; background:var(--panel); border:1px solid var(--line); border-radius:2px;
+    text-decoration:none; transition:border-color .2s;
+  }
+  .contact-card:hover{border-color:var(--signal);}
+  .contact-card .clabel{font-size:11px; color:var(--signal); letter-spacing:1px; margin-bottom:8px; display:block;}
+  .contact-card .cval{font-size:14px; color:var(--paper);}
+
+  footer{padding:36px 0 50px; text-align:center; color:var(--paper-dim); font-size:12px; border-top:1px solid var(--line);}
+</style>
+</head>
+<body>
+
+<div class="grid-overlay"></div>
+
+<nav>
+  <div class="wrap">
+    <span class="nav-mark">T.ANSARI</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#hackathon">Hackathon</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Available for opportunities</div>
+    <h1 class="title">Thameem Ansari I<br><span>builds & secures software.</span></h1>
+    <p class="role-line">Software Engineer — B.Tech IT, 2nd Year<span class="cursor"></span></p>
+    <div class="hero-links">
+      <a href="#hackathon" class="btn primary">View Hackathon Project</a>
+      <a href="#contact" class="btn">Get in Touch</a>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="sec-label">01 — About</div>
+    <h2 class="sec-title">From port scanners to production systems.</h2>
+    <p class="about-text">
+      I'm an <strong>Information Technology undergraduate</strong> with a growing focus on <strong>cybersecurity and ethical hacking</strong>. I've built beginner security tools from scratch — a port scanner, a Caesar cipher utility, and a packet sniffer using Scapy — and I run a Kali Linux live environment to explore the field hands-on. Alongside that, I work as a <strong>Software Engineer</strong>, and I'm currently building a real-time monitoring platform for my college hackathon.
+    </p>
+    <div class="stack-row">
+      <span class="chip">Python</span>
+      <span class="chip">Cybersecurity</span>
+      <span class="chip">Kali Linux</span>
+      <span class="chip">Wireshark / Nmap</span>
+      <span class="chip">React</span>
+      <span class="chip">Node.js</span>
+      <span class="chip">PostgreSQL</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="hackathon">
+  <div class="wrap">
+    <div class="sec-label">02 — Featured Build</div>
+    <h2 class="sec-title">College hackathon project</h2>
+
+    <div class="case-file">
+      <div class="case-header">
+        <span class="case-id">PROJECT // NATIONAL-LAND-SYSTEM</span>
+        <span class="case-status">IN PROGRESS</span>
+      </div>
+      <div class="case-title">Real-Time National Land Acquisition &amp; Management System</div>
+      <p class="case-brief">
+        An end-to-end digital platform that tracks government land acquisition — from notification and survey to compensation, disputes, and final possession — with live status monitoring and a decision-support dashboard for officials.
+      </p>
+
+      <div class="module-list">
+        <div class="module"><span class="mnum">MODULE 01</span><span class="mname">Land Records &amp; GIS Mapping</span></div>
+        <div class="module"><span class="mnum">MODULE 02</span><span class="mname">Acquisition Workflow Tracker</span></div>
+        <div class="module"><span class="mnum">MODULE 03</span><span class="mname">Compensation &amp; Payment Engine</span></div>
+        <div class="module"><span class="mnum">MODULE 04</span><span class="mname">Stakeholder Portal (Officer / Landowner)</span></div>
+        <div class="module"><span class="mnum">MODULE 05</span><span class="mname">Decision Support Dashboard</span></div>
+        <div class="module"><span class="mnum">MODULE 06</span><span class="mname">Alerts &amp; Grievance Redressal</span></div>
+      </div>
+
+      <div class="case-stack">
+        <span>React</span><span>Tailwind CSS</span><span>Node.js</span><span>PostgreSQL</span><span>Leaflet.js</span><span>Recharts</span>
+      </div>
+
+      <div class="case-footer">
+        <a href="#" target="_blank">↗ Source Code</a>
+        <a href="#" target="_blank">↗ Live Demo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="sec-label">03 — Contact</div>
+    <h2 class="sec-title">Let's connect.</h2>
+    <div class="contact-grid">
+      <a href="#" class="contact-card">
+        <span class="clabel">GITHUB</span>
+        <span class="cval">github.com/your-username</span>
+      </a>
+      <a href="#" class="contact-card">
+        <span class="clabel">EMAIL</span>
+        <span class="cval">your.email@example.com</span>
+      </a>
+      <a href="#" class="contact-card">
+        <span class="clabel">LINKEDIN</span>
+        <span class="cval">linkedin.com/in/your-profile</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 Thameem Ansari I — Built with HTML, CSS &amp; JS.</div>
+</footer>
+
+</body>
+</html>
